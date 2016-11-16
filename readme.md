@@ -98,7 +98,7 @@ a demo for the wechat hotfix [tinker](https://github.com/Tencent/tinker).
 
     if you have old custom application. you can copy the content to this class
 
-    ```
+    ```java
     package com.siyehua.wechathotfix;
 
     import android.annotation.TargetApi;
