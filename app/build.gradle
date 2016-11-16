@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.tencent.tinker.patch'
+
+/**
+ * package name
+ */
+def packageID
+/**
+ * application class name,use in SampleApplicationLike.
+ */
+def applicationName
+def oldAPKPath ="./app-release.apk"
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'siyehua'
+            keyPassword 'siyehua'
+            storeFile file('./keystore/siyehua.jks')
+            storePassword 'siyehua'
+        }
+    }
+    dexOptions {
+        jumboMode = true
+    }
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId packageID = "com.siyehua.wechathotfix"
+        minSdkVersion 14
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled false
+        // set this available if you set multiDexEnabled true
+        // multiDexKeepProguard file("keep_in_main_dex.txt")
+        signingConfig signingConfigs.config
+
+        // custom field APPLICATION_NAME to BuildConfig
+        // to java file can use this value
+        buildConfigField "String", "APPLICATION_NAME", applicationName = "\"" + packageID + ".Siapplication" + "\""
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    //optional, help to generate the final application
+    provided 'com.tencent.tinker:tinker-android-anno:1.7.3'
+    //tinker's main Android lib
+    compile 'com.tencent.tinker:tinker-android-lib:1.7.3'
+    compile 'com.android.support:multidex:1.0.1'
+}
+tinkerPatch {
+
+    //旧的,需要修复的apk的地址
+    oldApk = file(oldAPKPath)
+    ignoreWarning = true
+    useSign = true
+    buildConfig {
+        applyMapping = null
+        applyResourceMapping = null
+        tinkerId = "tinkerId"
+    }
+
+    dex {
+        dexMode = "jar"
+        usePreGeneratedPatchDex = false
+        pattern = ["classes*.dex",
+                   "assets/secondary-dex-?.jar"]
+        loader = ["com.tencent.tinker.loader.*",
+                  applicationName,
+                  packageID + ".BaseBuildInfo"
+        ]
+    }
+
+    lib {
+        pattern = ["lib/armeabi/*.so"]
+    }
+
+    res {
+        pattern = ["res/*", "assets/*", "resources.arsc", "AndroidManifest.xml"]
+        ignoreChange = ["assets/sample_meta.txt"]
+        largeModSize = 100
+    }
+
+    packageConfig {
+        configField("patchMessage", "tinker is sample to use")
+        configField("platform", "all")
+        configField("patchVersion", "1.0")
+    }
+
+    sevenZip {
+        zipArtifact = "com.tencent.mm:SevenZip:1.1.10"
+    }
+}
