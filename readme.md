@@ -1,7 +1,7 @@
-#WeChat tinker use demo
+# WeChat tinker use demo
 a demo for the wechat hotfix [tinker](https://github.com/Tencent/tinker).
 
-##Getting started
+## Getting started
 1. add tinker-gradle-plugin as a dependency in your main build.gradle in the root of your project
 
     ```
@@ -158,7 +158,7 @@ a demo for the wechat hotfix [tinker](https://github.com/Tencent/tinker).
 
     Note: the name must equals the value: **applicationName** in the module build.gradle
 
-#Usage
+# Usage
 now you can use the hot fix plugin.
  * run you app to get a apk, install to your phone, copy the apk into the path **oldAPKPath**
  * repair the code
@@ -191,12 +191,12 @@ now you can use the hot fix plugin.
     
     more information, you can [click](./app/src/main/java/com/siyehua/wechathotfix/MainActivity.java).
 
-##References
+## References
 https://github.com/Tencent/tinker
 
 http://www.jianshu.com/p/75e4ebeb6b77
 
-##License
+## License
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
